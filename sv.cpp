@@ -13,6 +13,7 @@
 
 using namespace std;
 
+//deneme
 void error(char *str)
 {
     perror(str);
