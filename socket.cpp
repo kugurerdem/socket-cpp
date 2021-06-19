@@ -32,6 +32,7 @@ int Socket::bind(string _address, int PORT){
 
 // listen
 int Socket::listen(int max){
+    cout << "Listening on socket " << socket_fd << endl;
     return ::listen(socket_fd, max);
 }
 
@@ -42,8 +43,14 @@ int Socket::listen(){
 // accept
 Socket Socket::accept(){
     struct sockaddr_in client_address;
-    int client_address_length;
+    int client_address_length = sizeof(client_address);
     int clientSocket_fd = ::accept(socket_fd, (struct sockaddr *)&client_address, (socklen_t *)&client_address_length);
+
+    if(clientSocket_fd == -1){
+        cout << "Socket is not accepted" << endl;
+    } else{
+        cout << "Socket " << clientSocket_fd << " accepted" << endl;
+    }
 
     // create new Socket object
     Socket clientSocket = Socket();

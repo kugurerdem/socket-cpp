@@ -32,3 +32,9 @@ std::string uint32_to_string(uint32_t num){
     }
     return str;
 } 
+
+void error(std::string str)
+{
+    perror(str);
+    exit(EXIT_FAILURE);
+}
