@@ -106,6 +106,6 @@ Packet Socket::readPacket(){
 
 int main(){
     unsigned char chars[4] = {0xEA,0x15,0x11,0x13};
-    cout << chars_to_uint32(chars) << endl;
+    cout << uchars_to_uint32(chars) << endl;
     return 0;  
 }
