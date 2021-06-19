@@ -7,7 +7,10 @@
 #include <unistd.h>
 
 #include <string>
+#include <string.h>
 #include <iostream>
+#include "packet.h"
+#include "utils.h"
 
 class Socket{
 
@@ -28,6 +31,9 @@ public:
     int read(char* buffer, int toRead);
     int send(const void *buf, size_t len, int flags = 0);
     int close();
+
+    int sendPacket(Packet packet);
+    Packet readPacket();
 
     // GETTERS
     int getDescriptor(){ return socket_fd; }

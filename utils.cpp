@@ -20,7 +20,27 @@ char* uint32_to_chars(uint32_t num, char* chars){
         num = num / 256;
     }
     return chars;
-} 
+}
+
+uint32_t uchars_to_uint32(unsigned char* chars){
+    int num = 1;
+    uint32_t result = 0;
+    for(int i = 3; i >= 0; i--){
+        result += chars[i] * num;
+        num = num * 256;
+    }
+
+    return result;
+}
+
+unsigned char[] chars_to_uchars(char* chars, int len){
+    unsigned char uchars[len];
+    for(int i = 0; i < len; i++){
+        uchars[i] = chars[i] + 128;
+    }
+
+    return chars;
+}
 
 std::string uint32_to_string(uint32_t num){
     std::string str;
@@ -33,8 +53,4 @@ std::string uint32_to_string(uint32_t num){
     return str;
 } 
 
-void error(std::string str)
-{
-    perror(str);
-    exit(EXIT_FAILURE);
-}
+

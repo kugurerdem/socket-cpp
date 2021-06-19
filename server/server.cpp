@@ -17,8 +17,13 @@ int Server::run(int PORT){
     printf("%s \r\n", buffer);
     cout << buffer << endl;
 
-    clientSocket.send(buffer, strlen(buffer), 0);
-    printf("%s - message sent \r\n", buffer);
+    // clientSocket.send(buffer, strlen(buffer), 0);
+    
+    Packet packet = Packet(0x61616161, 4, "abce");
+    clientSocket.sendPacket(packet);
+
+    cout << (string) packet << "- sent" << endl;
+    cout << ((string) packet).c_str()<< "- sent" << endl;
 
     return 0;
 }

@@ -7,6 +7,7 @@ Packet::Packet(uint32_t _type, uint32_t _size, std::string _data){
     data = _data;
 }
 
+// TO-DO
 Packet::Packet(char* buffer){
     
 }

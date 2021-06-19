@@ -75,3 +75,37 @@ int Socket::send(const void *buf, size_t len, int flags){
 int Socket::close(){
     return ::close(socket_fd);
 }
+
+int Socket::sendPacket(Packet packet){
+    string str = (string) packet;
+    const char* buffer = str.c_str();
+    send(buffer, strlen(buffer), 0);
+
+    return 1;
+}
+
+Packet Socket::readPacket(){
+    // read the header first
+    char header[8] = {0};
+    int arrlen = strlen(header);
+    read(header, arrlen);
+
+    // read 
+    uint32_t type = 0;
+    uint32_t size = 0;
+
+    int num = 1;
+    for(int i = 3; i >= 0; i--){
+        type = type + (header[i] * num);
+        size = size + (header[i+4] * num);
+        num = num * 16; 
+    }
+
+    char data[size];
+}
+
+int main(){
+    unsigned char chars[4] = {0xEA,0x15,0x11,0x13};
+    cout << chars_to_uint32(chars) << endl;
+    return 0;  
+}
