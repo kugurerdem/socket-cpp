@@ -64,7 +64,11 @@ int main(int argc, char const *argv[])
     }
 
     while( true){
-        read(clientSocket, buffer, 1024);
+        read(clientSocket, buffer, 2);
+        printf("%s\n", buffer);
+        read(clientSocket, buffer, 1);
+        printf("%s\n", buffer);
+        read(clientSocket, buffer, 1);
         printf("%s\n", buffer);
         send(clientSocket, buffer, strlen(buffer), 0);
         printf("%s - message sent\n", buffer);
@@ -73,4 +77,3 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
-
