@@ -86,26 +86,27 @@ int Socket::sendPacket(Packet packet){
 
 Packet Socket::readPacket(){
     // read the header first
-    char header[8] = {0};
-    int arrlen = strlen(header);
-    read(header, arrlen);
+    int HEADER_LEN = 8;
+    char header[HEADER_LEN] = {0};
 
-    // read 
-    uint32_t type = 0;
-    uint32_t size = 0;
+    read(header, HEADER_LEN); // read 
 
-    int num = 1;
-    for(int i = 3; i >= 0; i--){
-        type = type + (header[i] * num);
-        size = size + (header[i+4] * num);
-        num = num * 16; 
-    }
+    uint32_t type = uchars_to_uint32((unsigned char*) header);
+    uint32_t size = uchars_to_uint32((unsigned char*) (header+4) );
 
+    // read the data
     char data[size];
+    read(data, size);
+
+    return Packet(type, size, (string) data);;
 }
 
-int main(){
+/* int main(){
     unsigned char chars[4] = {0xEA,0x15,0x11,0x13};
-    cout << uchars_to_uint32(chars) << endl;
+    char my_str[4] = {'a','b','c', 'd'};
+    unsigned char* my_str2 = (unsigned char*) my_str;
+    cout << my_str << endl;
+    cout << my_str2 << endl;
+    cout << uchars_to_uint32((unsigned char*) chars) << endl;
     return 0;  
-}
+} */

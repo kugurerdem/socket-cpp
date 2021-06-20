@@ -33,14 +33,14 @@ uint32_t uchars_to_uint32(unsigned char* chars){
     return result;
 }
 
-/* unsigned char[] chars_to_uchars(char* chars, int len){
-    unsigned char uchars[len];
+unsigned char* chars_to_uchars(char* chars, int len){
+    unsigned char* uchars = new unsigned char[len];
     for(int i = 0; i < len; i++){
-        uchars[i] = chars[i] + 128;
+        uchars[i] = chars[i];
     }
 
-    return chars;
-} */
+    return uchars;
+} 
 
 std::string uint32_to_string(uint32_t num){
     std::string str;

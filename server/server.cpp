@@ -17,8 +17,6 @@ int Server::run(int PORT){
     printf("%s \r\n", buffer);
     cout << buffer << endl;
 
-    // clientSocket.send(buffer, strlen(buffer), 0);
-    
     Packet packet = Packet(0x61616161, 4, "abce");
     clientSocket.sendPacket(packet);
 
