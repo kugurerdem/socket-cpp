@@ -24,9 +24,11 @@ private:
 public:
     Socket(int domain = AF_INET, int type = SOCK_STREAM, int protocol = 0);
     int open();
+    int setAddress( std::string address, int PORT);
     int bind(std::string address, int PORT);
     int listen();
     int listen(int max);
+    int connect();
     Socket accept();
     int read(char* buffer, int toRead);
     int send(const void *buf, size_t len, int flags = 0);

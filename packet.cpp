@@ -17,8 +17,8 @@ Packet::operator std::string(){
             
     packet += uint32_to_string(type);
     packet += uint32_to_string(size);
-    for(int i = 8; i < size + 8; i++){
-        packet += data[i-8];
+    for(int i = 0; i < size; i++){
+        packet += data[i];
     }
 
     return packet;

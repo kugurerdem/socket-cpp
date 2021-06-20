@@ -25,22 +25,14 @@ char* uint32_to_chars(uint32_t num, char* chars){
 uint32_t uchars_to_uint32(unsigned char* chars){
     int num = 1;
     uint32_t result = 0;
-    for(int i = 3; i >= 0; i--){
+    for(int i = 0; i < 4; i++){
+        // std::cout << (uint) chars[i] << "x" << num << std::endl;
         result += chars[i] * num;
         num = num * 256;
     }
 
     return result;
 }
-
-unsigned char* chars_to_uchars(char* chars, int len){
-    unsigned char* uchars = new unsigned char[len];
-    for(int i = 0; i < len; i++){
-        uchars[i] = chars[i];
-    }
-
-    return uchars;
-} 
 
 std::string uint32_to_string(uint32_t num){
     std::string str;

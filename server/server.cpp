@@ -14,14 +14,14 @@ int Server::run(int PORT){
     Socket clientSocket = sv_socket.accept();
     char buffer[1024] = {0};
     clientSocket.read(buffer, 1024);
-    printf("%s \r\n", buffer);
     cout << buffer << endl;
 
-    Packet packet = Packet(0x61616161, 4, "abce");
+    Packet packet = Packet(1633771873, 4, "abce");
     clientSocket.sendPacket(packet);
 
     cout << (string) packet << "- sent" << endl;
-    cout << ((string) packet).c_str()<< "- sent" << endl;
+    cout << packet.getData() << "- sent" << endl;
+    cout << packet.getData().c_str() << "- sent" << endl;
 
     return 0;
 }

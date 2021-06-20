@@ -14,14 +14,27 @@ int Socket::open(){
     socket_fd = socket(domain, type, protocol);
 }
 
-// Binds and address to a socket
-int Socket::bind(string _address, int PORT){
+// sets the address of the socket
+int Socket::setAddress(string _address, int PORT){
     address.sin_family = AF_INET;   
     inet_aton(_address.c_str(), (struct in_addr *)&address.sin_addr.s_addr);
     address.sin_port = htons(PORT);
 
     cout << inet_ntoa((struct in_addr)address.sin_addr) << endl;
+    // Convert IPv4 and IPv6 addresses from text to binary form
+    if (inet_pton(AF_INET, _address.c_str(), &address.sin_addr) <= 0)
+    {
+        cout << "\nInvalid address/ Address not supported \n" << endl;
+        return -1;
+    }
 
+    return 1;
+}   
+
+// Binds and address to a socket
+int Socket::bind(string _address, int PORT){
+    setAddress(_address, PORT);
+    
     // Attaching socket to the PORT
     int _bind = ::bind(socket_fd, (struct sockaddr *)&address, sizeof(address));
     if (_bind < 0){
@@ -38,6 +51,18 @@ int Socket::listen(int max){
 
 int Socket::listen(){
     return Socket::listen(MAX_QUEUE);
+}
+
+// connect
+int Socket::connect(){
+    int _connect = ::connect(socket_fd,(struct sockaddr *)&address, sizeof(address) );
+    if (_connect < 0)
+    {
+        printf("\nConnection Failed \n");
+        return -1;
+    }
+
+    return 1;
 }
 
 // accept
@@ -79,7 +104,7 @@ int Socket::close(){
 int Socket::sendPacket(Packet packet){
     string str = (string) packet;
     const char* buffer = str.c_str();
-    send(buffer, strlen(buffer), 0);
+    send(buffer, str.length(), 0);
 
     return 1;
 }
@@ -97,16 +122,7 @@ Packet Socket::readPacket(){
     // read the data
     char data[size];
     read(data, size);
+    cout << data << endl;
 
-    return Packet(type, size, (string) data);;
+    return Packet(type, size, (string) data);
 }
-
-/* int main(){
-    unsigned char chars[4] = {0xEA,0x15,0x11,0x13};
-    char my_str[4] = {'a','b','c', 'd'};
-    unsigned char* my_str2 = (unsigned char*) my_str;
-    cout << my_str << endl;
-    cout << my_str2 << endl;
-    cout << uchars_to_uint32((unsigned char*) chars) << endl;
-    return 0;  
-} */
