@@ -17,6 +17,7 @@ private:
 public:
    /*  Packet(uint32_t _type, std::string _data);
     Packet(uint32_t _type, uint32_t _size, std::string _data); */
+    Packet();
     Packet(uint32_t _type, uint32_t _size, char* _data);
 
     // operator std::string();

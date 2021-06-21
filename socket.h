@@ -35,7 +35,7 @@ public:
     int close();
 
     int sendPacket(Packet packet);
-    Packet readPacket();
+    int readPacket(Packet& packet);
 
     // GETTERS
     int getDescriptor(){ return socket_fd; }

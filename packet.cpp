@@ -13,6 +13,9 @@ using namespace std;
 Packet::Packet(uint32_t _type, std::string _data){
     Packet(_type, _data.length(), _data);
 } */
+Packet::Packet(){
+    Packet(0, 0, 0);
+}
 
 Packet::Packet(uint32_t _type, uint32_t _size, char* _data){
     type = _type;

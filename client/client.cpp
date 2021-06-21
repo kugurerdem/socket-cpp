@@ -31,15 +31,10 @@ int Client::run(int PORT){
     Packet packet5 = Packet(1, 8, data5);
     
     serverSocket.sendPacket(packet);
-    serverSocket.readPacket();
-    serverSocket.sendPacket(packet2);
-    serverSocket.readPacket(); 
+    serverSocket.sendPacket(packet2); 
     serverSocket.sendPacket(packet3);
-    serverSocket.readPacket();
     serverSocket.sendPacket(packet4);
-    serverSocket.readPacket();
-    serverSocket.sendPacket(packet5);
-    serverSocket.readPacket(); 
+    serverSocket.sendPacket(packet5); 
 
     /* 
     bool condition = true;

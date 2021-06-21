@@ -10,18 +10,16 @@ int Server::run(int PORT){
     sv_socket.bind("0.0.0.0", PORT);
     sv_socket.listen(10);
 
+    char buffer[1024];
     // accept a new client
     Socket clientSocket = sv_socket.accept();
-    for(int i = 0; i < 5; i++){
-        // read a packet
-        Packet packet = clientSocket.readPacket();
-        // packet.log();
-
-        // send the packet back
-        packet.setType(2);
-        clientSocket.sendPacket(packet);
-
-        // packet.log();
+    bool condition = true;
+    while(condition){
+        Packet packet;
+        int readValue = clientSocket.readPacket(packet);
+        if(readValue == 0){
+            condition = false;
+        }
     }
 
     return 0;
