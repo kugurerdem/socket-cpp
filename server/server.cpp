@@ -12,16 +12,17 @@ int Server::run(int PORT){
 
     // accept a new client
     Socket clientSocket = sv_socket.accept();
-    char buffer[1024] = {0};
-    clientSocket.read(buffer, 1024);
-    cout << buffer << endl;
+    for(int i = 0; i < 5; i++){
+        // read a packet
+        Packet packet = clientSocket.readPacket();
+        // packet.log();
 
-    Packet packet = Packet(1633771873, 4, "abce");
-    clientSocket.sendPacket(packet);
+        // send the packet back
+        packet.setType(2);
+        clientSocket.sendPacket(packet);
 
-    cout << (string) packet << "- sent" << endl;
-    cout << packet.getData() << "- sent" << endl;
-    cout << packet.getData().c_str() << "- sent" << endl;
+        // packet.log();
+    }
 
     return 0;
 }

@@ -88,7 +88,20 @@ Socket Socket::accept(){
 
 // read
 int Socket::read(char* buffer, int toRead){
-    return ::read(socket_fd, buffer, toRead);
+    int totalRead = 0;
+    while (totalRead < toRead) {
+        int result = ::read(socket_fd, buffer + totalRead, toRead-totalRead);
+        if (result < 0) {
+            return -1;
+        } else {
+            totalRead += result;
+            if (result == 0) {
+                return -1;
+            }
+        }
+    }
+
+    return totalRead;
 }
 
 // send
@@ -102,14 +115,25 @@ int Socket::close(){
 }
 
 int Socket::sendPacket(Packet packet){
-    string str = (string) packet;
-    const char* buffer = str.c_str();
-    send(buffer, str.length(), 0);
+    // string str = (char*) packet;
+    // char* buffer = (char*) packet;
+    cout << "--- Packet sending..." << endl;
+    char* buffer = (char*) packet;
+    int buffer_length = packet.getSize() + 8;
 
-    return 1;
+    int sendResult = send(buffer, buffer_length, 0);
+    
+    if(sendResult < 1){
+        perror("--- Packet could not send!");
+    } else{
+        cout << "--- Packet sent. Result:" << sendResult << endl;
+    }
+
+    return sendResult;
 }
 
 Packet Socket::readPacket(){
+    cout << "--- Packet is being readed..." << endl;
     // read the header first
     int HEADER_LEN = 8;
     char header[HEADER_LEN] = {0};
@@ -117,12 +141,22 @@ Packet Socket::readPacket(){
     read(header, HEADER_LEN); // read 
 
     uint32_t type = uchars_to_uint32((unsigned char*) header);
-    uint32_t size = uchars_to_uint32((unsigned char*) (header+4) );
-
+    uint32_t size = uchars_to_uint32((unsigned char*) (header+4)); // uchars_to_uint32((unsigned char*) (header+4) );
+    cout << "type:" << type << ", size:" << size << endl;
     // read the data
-    char data[size];
-    read(data, size);
-    cout << data << endl;
+    char* data = new char[size];
+    int readResult = read(data, size);
+    cout << "data:";
+    for(int i = 0; i < size; i++){
+        cout << data[i];
+    }
+    cout << endl;
+    
+    if(readResult < 1){
+        perror("--- Packet could not read!");
+    } else{
+        cout << "--- Packet is read. Result: " << readResult << endl;
+    }
 
-    return Packet(type, size, (string) data);
+    return Packet(type, size, data);
 }

@@ -15,8 +15,8 @@ char* hexToASCII(std::string c)
 
 char* uint32_to_chars(uint32_t num, char* chars){
     for(int i = 3; i >= 0; i--){
-        int least = num % 256;
-        chars[i] = least;
+        unsigned char ch = num % 256;
+        chars[i] = (char) ch;
         num = num / 256;
     }
     return chars;
@@ -25,7 +25,7 @@ char* uint32_to_chars(uint32_t num, char* chars){
 uint32_t uchars_to_uint32(unsigned char* chars){
     int num = 1;
     uint32_t result = 0;
-    for(int i = 0; i < 4; i++){
+    for(int i = 3; i >= 0; i--){
         // std::cout << (uint) chars[i] << "x" << num << std::endl;
         result += chars[i] * num;
         num = num * 256;
@@ -39,7 +39,7 @@ std::string uint32_to_string(uint32_t num){
     for(int i = 3; i >= 0; i--){
         int least = num % 256;
         char ch = least;
-        str += ch;
+        str = ch + str;
         num = num / 256;
     }
     return str;
