@@ -19,7 +19,9 @@ private:
     int socket_fd;
     struct sockaddr_in address;
     int addrlen;
-    char buffer[1024];
+    int BUFFER_LENGHT = 8192;
+    char buffer[BUFFER_LENGTH];
+
     int MAX_QUEUE= 10;
 public:
     Socket(int domain = AF_INET, int type = SOCK_STREAM, int protocol = 0);

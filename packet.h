@@ -15,12 +15,9 @@ private:
     uint32_t size; // Size of the data, hexadecimal
     char* data; // Data
 public:
-   /*  Packet(uint32_t _type, std::string _data);
-    Packet(uint32_t _type, uint32_t _size, std::string _data); */
     Packet();
     Packet(uint32_t _type, uint32_t _size, char* _data);
 
-    // operator std::string();
     operator char*();
     void log();
 
@@ -28,7 +25,7 @@ public:
     void setType(uint32_t _type){ type = _type;}
     void setSize(uint32_t _size){ size = _size;}
     void setData(char* _data){ data = _data;}
-
+    
     // GETTERS
     uint32_t getType(){ return type;}
     uint32_t getSize(){ return size;}

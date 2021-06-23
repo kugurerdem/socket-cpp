@@ -89,7 +89,6 @@ Socket Socket::accept(){
 // read
 int Socket::read(char* buffer, int toRead){
     int totalRead = 0;
-    int i = 0;
     while (totalRead < toRead) {
         int result = ::read(socket_fd, buffer + totalRead, toRead-totalRead);
         // cout << "read phase " << i << " "<< result << endl;
@@ -101,7 +100,6 @@ int Socket::read(char* buffer, int toRead){
                 return result;
             }
         }
-        i++;
     }
 
     return totalRead;

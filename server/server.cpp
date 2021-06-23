@@ -10,7 +10,6 @@ int Server::run(int PORT){
     sv_socket.bind("0.0.0.0", PORT);
     sv_socket.listen(10);
 
-    char buffer[1024];
     // accept a new client
     Socket clientSocket = sv_socket.accept();
     bool condition = true;
