@@ -7,6 +7,8 @@ Socket::Socket(int _domain, int _type, int _protocol){
     domain = _domain;
     type = _type;
     protocol = _protocol;
+
+    BUFFER = CircularBuffer<char, BUFFER_LENGTH>();
 }
 
 // opens a socket

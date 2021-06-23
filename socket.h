@@ -11,6 +11,7 @@
 #include <iostream>
 #include "packet.h"
 #include "utils.h"
+#include "CircularBuffer.h"
 
 class Socket{
 
@@ -19,10 +20,10 @@ private:
     int socket_fd;
     struct sockaddr_in address;
     int addrlen;
-    int BUFFER_LENGHT = 8192;
-    char buffer[BUFFER_LENGTH];
+    int BUFFER_LENGHT = 8192; // for client sockets
+    CircularBuffer<char, BUFFER_LENGTH> BUFFER;  // for client sockets
 
-    int MAX_QUEUE= 10;
+    int MAX_QUEUE= 10; // for server sockets
 public:
     Socket(int domain = AF_INET, int type = SOCK_STREAM, int protocol = 0);
     int open();
