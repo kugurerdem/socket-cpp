@@ -14,7 +14,9 @@ class CircularBuffer{
         CircularBuffer();
         
         void enqueue(T item);
+        void enqueue(T* items, int LEN);
         T dequeue();
+        int dequeue(T* items, int LEN);
         int size();
 
         bool is_full();
