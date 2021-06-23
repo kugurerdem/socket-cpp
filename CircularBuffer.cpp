@@ -37,24 +37,16 @@ T CircularBuffer<T,N>::dequeue(){
 template <typename T, int N> 
 int CircularBuffer<T,N>::size(){
     return count;
-    /*     
-    if(writeIndex >= readIndex){
-        return writeIndex - readIndex;
-    } 
-    return max_size - (readIndex - writeIndex); 
-    */
 }
 
 template <typename T, int N> 
 bool CircularBuffer<T,N>::is_full(){
     return count == max_size;
-    // return readIndex == (writeIndex + 1) % max_size; 
 }
 
 template <typename T, int N> 
 bool CircularBuffer<T,N>::is_empty(){
     return count == 0;
-    // return readIndex == writeIndex; 
 }
 
 int main(){
