@@ -16,18 +16,18 @@ int Server::run(int PORT){
     Socket clientSocket = sv_socket.accept();
     bool condition = true;
 
-    clientSocket.runReadThread();
-
-    // std::thread r_thread(&Socket::ReadThread, clientSocket);
-    // r_thread.join();
-
-    /* while(condition){
-        Packet packet;
-        int readValue = clientSocket.readPacket(packet);
-        if(readValue == 0){
-            condition = false;
-        }
-    } */
+    pthread_t r_thread = clientSocket.runReadThread();
+    
+    cout << "hi" << endl;
+    Packet packet;
+    
+    sleep(5);
+    while(true){
+        clientSocket.readPacket(packet);
+    }
+    
+    
+    pthread_join(r_thread, NULL);
 
     return 0;
 }

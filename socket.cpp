@@ -5,12 +5,13 @@ Socket::Socket(int _domain, int _type, int _protocol){
     domain = _domain;
     type = _type;
     protocol = _protocol;
-
+    option = 1;
 }
 
 // opens a socket
 int Socket::open(){
     socket_fd = socket(domain, type, protocol);
+    setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 }
 
 // sets the address of the socket
@@ -85,20 +86,36 @@ Socket Socket::accept(){
     return clientSocket;
 }
 
-// read
+// read from circular buffer
 int Socket::read(char* buffer, int toRead){
+    int buffer_size = BUFFER.size();
+    // cout << "buffer_size: " << buffer_size << endl;
+    // cout << "input toRead: " << toRead << endl;
+    if( buffer_size < toRead){ 
+        toRead = buffer_size; 
+    }
+    // cout << "updated toRead: " << toRead << endl;
+
+    BUFFER.dequeue(buffer, toRead);
+
+    return toRead;
+}
+
+// reads exactly toRead bytes
+int Socket::readXBytes(char* buffer, int toRead){
+    int i = 0;
     int totalRead = 0;
+    // cout << "read phase X" << endl;
     while (totalRead < toRead) {
-        int result = ::read(socket_fd, buffer + totalRead, toRead-totalRead);
+        int result = read(buffer + totalRead, toRead-totalRead);
         // cout << "read phase " << i << " "<< result << endl;
         if (result < 0) {
             return result;
         } else {
             totalRead += result;
-            if (result == 0) {
-                return result;
-            }
         }
+
+        i++;
     }
 
     return totalRead;
@@ -136,7 +153,8 @@ int Socket::readPacket(Packet& packet){
     int HEADER_LEN = 8;
     char header[HEADER_LEN] = {0};
 
-    int headerResult = read(header, HEADER_LEN); // read 
+    int headerResult = readXBytes(header, HEADER_LEN); // read 
+    cout << "--- headerResult: " << headerResult << endl;
     if( headerResult < 1){
         perror("--- Header could not read!");
         return headerResult;
@@ -147,7 +165,7 @@ int Socket::readPacket(Packet& packet){
     cout << "type:" << type << ", size:" << size << endl;
     // read the data
     char* data = new char[size];
-    int readResult = read(data, size);
+    int readResult = readXBytes(data, size);
     cout << "data:";
     for(int i = 0; i < size; i++){
         cout << data[i];
@@ -168,9 +186,9 @@ int Socket::readPacket(Packet& packet){
     return headerResult + readResult;
 }
 
-void Socket::runReadThread(){
+pthread_t Socket::runReadThread(){
     pthread_create(&r_thread, NULL, (THREADFUNCPTR) &Socket::ReadThread, this);
-    pthread_join(r_thread, NULL);
+    return r_thread;
 }
 
 void* Socket::ReadThread(){
@@ -181,23 +199,15 @@ void* Socket::ReadThread(){
             char TMP_BUFFER[EMPTY_SPACE]; // temporary buffer for retrieving data from network buffer
             
             int valread = ::read(socket_fd, TMP_BUFFER, EMPTY_SPACE);
-            if( valread > 0){
+/*             if( valread > 0){
                 cout << "Read " << valread << " bytes from network buffer" << endl;
-            }
+            } */
+
             
-            pthread_mutex_lock(&lock);
             for(int i = 0; i < valread; i++){
                 BUFFER.enqueue( TMP_BUFFER[i]);
             }
-            pthread_mutex_unlock(&lock);
+            
         }
     }
 }
-
-/* int main(){
-    Socket socket;
-    std::thread r_thread(&Socket::ReadThread, socket);
-    r_thread.join();
-    cout << "slm" << endl;
-    return 0;
-} */

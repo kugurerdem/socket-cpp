@@ -30,44 +30,16 @@ int Client::run(int PORT){
     Packet packet4 = Packet(1, 2, data4);
     Packet packet5 = Packet(1, 8, data5);
     
-    serverSocket.sendPacket(packet);
-    serverSocket.sendPacket(packet2); 
-    serverSocket.sendPacket(packet3);
-    serverSocket.sendPacket(packet4);
-    serverSocket.sendPacket(packet5); 
-
-    /* 
-    bool condition = true;
-    do
-    {
-        int command;
-        printf("Choose a command \r\n");
-        printf("0. Close the socket \r\n");
-        printf("1. Send a message! \r\n");
-        printf("2. Read a message! \r\n");
-
-        cin >> command;
-
-        if( command == 0){
-            serverSocket.close();
-            condition = false;
-        }
-        else if( command == 1){
-            printf(">");
-            string data = "abcd";
-            cin >> data;
-            Packet sendPacket = Packet(1, data.length(), data);
-            serverSocket.sendPacket(sendPacket);
-            cout << "Packet " << (string) sendPacket <<" sent" << endl;
-        }
-        else if( command == 2){
-            memset(buffer, 0, 1024);
-            Packet packet = serverSocket.readPacket();
-            packet.log();
-            // printf("Server: %s\n", buffer);
-        }
+    while(true){
+        serverSocket.sendPacket(packet);
+/*         serverSocket.sendPacket(packet2); 
+        serverSocket.sendPacket(packet3);
+        serverSocket.sendPacket(packet4);
+        serverSocket.sendPacket(packet5);  */
+        sleep(1);
     }
-    while (condition); */
+
+    
 
     return 1;
 }

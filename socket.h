@@ -24,6 +24,7 @@ class Socket{
 private:
     int domain, type, protocol;
     int socket_fd;
+    int option;
     struct sockaddr_in address;
     int addrlen;
     CircularBuffer<char, BUFFER_LENGTH> BUFFER = CircularBuffer<char, BUFFER_LENGTH>();  // for client sockets
@@ -42,13 +43,14 @@ public:
     int connect();
     Socket accept();
     int read(char* buffer, int toRead);
+    int readXBytes(char* buffer, int toRead);
     int send(const void *buf, size_t len, int flags = 0);
     int close();
 
     int sendPacket(Packet packet);
     int readPacket(Packet& packet);
 
-    void runReadThread();
+    pthread_t runReadThread();
     void* ReadThread();
 
     // GETTERS
