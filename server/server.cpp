@@ -1,6 +1,8 @@
 #include "server.h"
 using namespace std;
 
+
+
 Server::Server(){
     sv_socket = Socket();
 }
@@ -14,8 +16,10 @@ int Server::run(int PORT){
     Socket clientSocket = sv_socket.accept();
     bool condition = true;
 
-    std::thread r_thread(&Socket::ReadThread, clientSocket);
-    r_thread.join();
+    clientSocket.runReadThread();
+
+    // std::thread r_thread(&Socket::ReadThread, clientSocket);
+    // r_thread.join();
 
     /* while(condition){
         Packet packet;

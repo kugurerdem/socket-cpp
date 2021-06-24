@@ -13,9 +13,11 @@
 #include "utils.h"
 #include "CircularBuffer.h"
 
-#include <thread>
+#include <pthread.h>
 
 #define BUFFER_LENGTH 8192
+
+typedef void * (*THREADFUNCPTR)(void *);
 
 class Socket{
 
@@ -26,6 +28,8 @@ private:
     int addrlen;
     CircularBuffer<char, BUFFER_LENGTH> BUFFER = CircularBuffer<char, BUFFER_LENGTH>();  // for client sockets
     // std::mutex buffer_mutex;
+    pthread_t r_thread;
+    pthread_mutex_t lock;
 
     int MAX_QUEUE= 10; // for server sockets
 public:
@@ -44,7 +48,8 @@ public:
     int sendPacket(Packet packet);
     int readPacket(Packet& packet);
 
-    void ReadThread();
+    void runReadThread();
+    void* ReadThread();
 
     // GETTERS
     int getDescriptor(){ return socket_fd; }

@@ -168,7 +168,12 @@ int Socket::readPacket(Packet& packet){
     return headerResult + readResult;
 }
 
-void Socket::ReadThread(){
+void Socket::runReadThread(){
+    pthread_create(&r_thread, NULL, (THREADFUNCPTR) &Socket::ReadThread, this);
+    pthread_join(r_thread, NULL);
+}
+
+void* Socket::ReadThread(){
     while(true){
         // Reading from the network buffer into socket's circular buffer
         int EMPTY_SPACE = BUFFER_LENGTH - BUFFER.size(); // available space in the circular buffer
@@ -180,11 +185,11 @@ void Socket::ReadThread(){
                 cout << "Read " << valread << " bytes from network buffer" << endl;
             }
             
+            pthread_mutex_lock(&lock);
             for(int i = 0; i < valread; i++){
-                // buffer_mutex.lock();
                 BUFFER.enqueue( TMP_BUFFER[i]);
-                // buffer_mutex.unlock();
             }
+            pthread_mutex_unlock(&lock);
         }
     }
 }
