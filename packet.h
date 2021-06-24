@@ -6,6 +6,8 @@
 #include <string>
 #include "utils.h"
 
+using namespace std;
+
 // 4 bytes for type
 // 4 bytes for size
 // size-many bytes for data

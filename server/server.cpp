@@ -13,13 +13,17 @@ int Server::run(int PORT){
     // accept a new client
     Socket clientSocket = sv_socket.accept();
     bool condition = true;
-    while(condition){
+
+    std::thread r_thread(&Socket::ReadThread, clientSocket);
+    r_thread.join();
+
+    /* while(condition){
         Packet packet;
         int readValue = clientSocket.readPacket(packet);
         if(readValue == 0){
             condition = false;
         }
-    }
+    } */
 
     return 0;
 }

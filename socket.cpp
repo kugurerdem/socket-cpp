@@ -1,14 +1,11 @@
 #include "socket.h"
 
-using namespace std;
-
 // Default constructor
 Socket::Socket(int _domain, int _type, int _protocol){
     domain = _domain;
     type = _type;
     protocol = _protocol;
 
-    BUFFER = CircularBuffer<char, BUFFER_LENGTH>();
 }
 
 // opens a socket
@@ -170,3 +167,32 @@ int Socket::readPacket(Packet& packet){
     
     return headerResult + readResult;
 }
+
+void Socket::ReadThread(){
+    while(true){
+        // Reading from the network buffer into socket's circular buffer
+        int EMPTY_SPACE = BUFFER_LENGTH - BUFFER.size(); // available space in the circular buffer
+        if( EMPTY_SPACE != 0){
+            char TMP_BUFFER[EMPTY_SPACE]; // temporary buffer for retrieving data from network buffer
+            
+            int valread = ::read(socket_fd, TMP_BUFFER, EMPTY_SPACE);
+            if( valread > 0){
+                cout << "Read " << valread << " bytes from network buffer" << endl;
+            }
+            
+            for(int i = 0; i < valread; i++){
+                // buffer_mutex.lock();
+                BUFFER.enqueue( TMP_BUFFER[i]);
+                // buffer_mutex.unlock();
+            }
+        }
+    }
+}
+
+/* int main(){
+    Socket socket;
+    std::thread r_thread(&Socket::ReadThread, socket);
+    r_thread.join();
+    cout << "slm" << endl;
+    return 0;
+} */
