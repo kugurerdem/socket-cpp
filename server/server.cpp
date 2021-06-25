@@ -11,14 +11,15 @@ void* thread_helper(void *voidArgs) {
     args->instance->ClientThread(args->socket);
 }
 
+
 Server::Server(){
     sv_socket = Socket();
+    MAX_QUEUE = 10;
 }
 
 int Server::run(int PORT){
     sv_socket.open();
     sv_socket.bind("0.0.0.0", PORT);
-    int MAX_QUEUE = 10;
 
     sv_socket.listen(MAX_QUEUE);
 

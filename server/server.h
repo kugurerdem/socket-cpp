@@ -9,7 +9,8 @@
 class Server{
 private:
     Socket sv_socket;
-    
+    int MAX_QUEUE;
+    // pthread_mutex_t log_lock = PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP;
 public:
     Server();
     int run(int PORT);
