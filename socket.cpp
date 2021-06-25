@@ -96,7 +96,9 @@ int Socket::read(char* buffer, int toRead){
     }
     // cout << "updated toRead: " << toRead << endl;
 
+    pthread_mutex_lock(&lock);
     BUFFER.dequeue(buffer, toRead);
+    pthread_mutex_unlock(&lock);
 
     return toRead;
 }
@@ -114,8 +116,8 @@ int Socket::readXBytes(char* buffer, int toRead){
         } else {
             totalRead += result;
         }
-
         i++;
+        // sleep(1);
     }
 
     return totalRead;
@@ -197,17 +199,14 @@ void* Socket::ReadThread(){
         int EMPTY_SPACE = BUFFER_LENGTH - BUFFER.size(); // available space in the circular buffer
         if( EMPTY_SPACE != 0){
             char TMP_BUFFER[EMPTY_SPACE]; // temporary buffer for retrieving data from network buffer
-            
+            // cout << "EMPTY SPACE " << EMPTY_SPACE << endl;
             int valread = ::read(socket_fd, TMP_BUFFER, EMPTY_SPACE);
-/*             if( valread > 0){
-                cout << "Read " << valread << " bytes from network buffer" << endl;
-            } */
+            
+            pthread_mutex_lock(&lock);
+            BUFFER.enqueue( TMP_BUFFER, valread);
+            pthread_mutex_unlock(&lock);
 
-            
-            for(int i = 0; i < valread; i++){
-                BUFFER.enqueue( TMP_BUFFER[i]);
-            }
-            
+            // cout << "valread: " << valread << endl;
         }
     }
 }

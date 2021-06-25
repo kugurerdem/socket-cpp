@@ -48,6 +48,7 @@ public:
 
         T item = buffer[readIndex];
         readIndex = (readIndex + 1) % max_size;
+
         count--;
         return item;
     }

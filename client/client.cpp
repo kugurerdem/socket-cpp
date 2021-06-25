@@ -17,7 +17,7 @@ int Client::run(int PORT){
     for(int i = 0; i < LEN; i++){
         data[i] = 0x61;
     }
-    Packet packet = Packet(0x61616161, LEN, data);
+    Packet packet = Packet(0x60606060, LEN, data);
 
    // Packet 2..5
     char data2[] = "merhaba";

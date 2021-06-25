@@ -30,7 +30,7 @@ private:
     CircularBuffer<char, BUFFER_LENGTH> BUFFER = CircularBuffer<char, BUFFER_LENGTH>();  // for client sockets
     // std::mutex buffer_mutex;
     pthread_t r_thread;
-    pthread_mutex_t lock;
+    pthread_mutex_t lock = PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP; // without this, programs cannot leave locks
 
     int MAX_QUEUE= 10; // for server sockets
 public:

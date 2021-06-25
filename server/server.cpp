@@ -21,7 +21,6 @@ int Server::run(int PORT){
     cout << "hi" << endl;
     Packet packet;
     
-    sleep(5);
     while(true){
         clientSocket.readPacket(packet);
     }
