@@ -130,6 +130,7 @@ int Socket::send(const void *buf, size_t len, int flags){
 
 // close
 int Socket::close(){
+    pthread_cancel(r_thread);
     return ::close(socket_fd);
 }
 
@@ -150,35 +151,33 @@ int Socket::sendPacket(Packet packet){
 }
 
 int Socket::readPacket(Packet& packet){
-    cout << "--- Packet is being readed..." << endl;
+    // cout << "--- Packet is being readed..." << endl;
     // read the header first
     int HEADER_LEN = 8;
     char header[HEADER_LEN] = {0};
 
     int headerResult = readXBytes(header, HEADER_LEN); // read 
-    cout << "--- headerResult: " << headerResult << endl;
+    // cout << "--- headerResult: " << headerResult << endl;
     if( headerResult < 1){
-        perror("--- Header could not read!");
+        // perror("--- Header could not read!");
         return headerResult;
     }
 
     uint32_t type = uchars_to_uint32((unsigned char*) header);
     uint32_t size = uchars_to_uint32((unsigned char*) (header+4)); // uchars_to_uint32((unsigned char*) (header+4) );
-    cout << "type:" << type << ", size:" << size << endl;
+    // cout << "type:" << type << ", size:" << size << endl;
     // read the data
     char* data = new char[size];
     int readResult = readXBytes(data, size);
-    cout << "data:";
+/*     cout << "data:";
     for(int i = 0; i < size; i++){
         cout << data[i];
     }
-    cout << endl;
+    cout << endl; */
     
     if(readResult < 1){
         return readResult;
-        perror("--- Packet could not read!");
-    } else{
-        cout << "--- Packet is read. Packet size: " << headerResult + readResult << endl;
+        // perror("--- Packet could not read!");
     }
 
     packet.setType(type);

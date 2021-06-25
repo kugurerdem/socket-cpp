@@ -14,32 +14,29 @@ int Client::run(int PORT){
     // Packet 1
     int LEN = 1600;
     char data[LEN] = {0};
-    for(int i = 0; i < LEN; i++){
-        data[i] = 0x61;
-    }
-    Packet packet = Packet(0x60606060, LEN, data);
+    for(int i = 0; i < LEN; i++){ data[i] = 0x61; }
 
-   // Packet 2..5
-    char data2[] = "merhaba";
-    char data3[] = "123456789";
-    char data4[] = "H1";
-    char data5[] = "Hello :)";
+    // Packet 2..5
+    char data2[] = "merhaba\0";
+    char data3[] = "123456789\0";
+    char data4[] = "H1\0";
+    char data5[] = "Hello :)\0";
+
+    int PACKETS_LEN = 5;
+    Packet packets[PACKETS_LEN];
+    packets[0] = Packet(0x60606060, LEN, data);
+    packets[1] = Packet(2, strlen(data2), data2);
+    packets[2] = Packet(3, strlen(data3), data3);
+    packets[3] = Packet(4, strlen(data4), data4);
+    packets[4] = Packet(5, strlen(data5), data5);
     
-    Packet packet2 = Packet(0x62616261, 7, data2);
-    Packet packet3 = Packet(1, 9, data3);
-    Packet packet4 = Packet(1, 2, data4);
-    Packet packet5 = Packet(1, 8, data5);
-    
+    srand((unsigned) time(0));
     while(true){
-        serverSocket.sendPacket(packet);
-/*         serverSocket.sendPacket(packet2); 
-        serverSocket.sendPacket(packet3);
-        serverSocket.sendPacket(packet4);
-        serverSocket.sendPacket(packet5);  */
-        sleep(1);
-    }
+        int index = rand() % PACKETS_LEN;
+        serverSocket.sendPacket(packets[index]);
 
-    
+        sleep(0.01);
+    }
 
     return 1;
 }

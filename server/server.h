@@ -13,4 +13,5 @@ private:
 public:
     Server();
     int run(int PORT);
+    void* ClientThread(Socket socket);
 };
