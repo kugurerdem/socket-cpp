@@ -1,6 +1,6 @@
 # socket-cpp
 
-POSIX compliant socket program.
+POSIX compliant multiclient-server network infrastructure that can operate autonomously in any application.
 
 # run
 
