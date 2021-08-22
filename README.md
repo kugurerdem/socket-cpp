@@ -5,7 +5,7 @@ POSIX compliant multiclient-server network infrastructure that can operate auton
 # run
 
 In server folder:
-`g++ -pthread *.cpp ../*.cpp -o sv; ./sv`
+`g++ -pthread *.cpp ../lib/*.cpp.o -o sv; ./sv.o
 
 In client folder:
-`g++ -pthread *.cpp ../*.cpp -o cli; ./cli`
+`g++ -pthread *.cpp ../lib/*.cpp.o -o cli; ./cli.o`
