@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../socket.h"
-#include "../packet.h"
+#include "../lib/socket.h"
+#include "../lib/packet.h"
 #include <string>
 #include <iostream>
 #include <string.h>

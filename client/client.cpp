@@ -8,7 +8,7 @@ Client::Client(){
 
 int Client::run(int PORT){
     serverSocket.open(); // opens the socket
-    serverSocket.setAddress("192.168.1.7", PORT); 
+    serverSocket.setAddress("192.168.1.114", PORT); 
     serverSocket.connect();
     
     // Packet 1
